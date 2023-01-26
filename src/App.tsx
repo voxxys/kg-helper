@@ -4,7 +4,7 @@ import { Route, Routes } from 'solid-app-router';
 
 import styles from './App.module.css';
 import Nav from './components/Nav';
-import Home from './pages/Home';
+import Plural from './pages/Plural';
 
 const [word, setWord] = createSignal('');
 
@@ -13,7 +13,7 @@ const App: Component = () => {
     <div class="container">
       <Nav />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Plural />} />
       </Routes>
     </div>
   );

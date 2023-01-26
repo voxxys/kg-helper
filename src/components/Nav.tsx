@@ -10,7 +10,7 @@ const Nav: Component = () => {
         class="btn btn-primary me-2"
         activeClass="btn-success"
       >
-        Grammar helper
+        Plural
       </NavLink>
     </nav>
   );
