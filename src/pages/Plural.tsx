@@ -1,46 +1,68 @@
 import { Component, createEffect, createSignal, For } from 'solid-js';
-import { word, setWord } from '../App';
+
+const [word, setWord] = createSignal('');
+const [suf, setSuf] = createSignal('');
+
+// var stuff: { [key: string]: string } = {};
+
+const sufPluralVowelHarmony: { [key: string]: string } = {
+  а: 'a',
+  ы: 'a',
+  е: 'e',
+  и: 'e',
+  о: 'о',
+  у: 'о',
+  ө: 'ө',
+  ү: 'ө',
+};
+
+let lastVowel_regex = /[аэеыиоөуү](?=([^аэеыиоөуү]*$))/;
+let vowelEnd_regex = /[аэеыиоөуү]$/;
+let sonorantEnd_regex = /[мнңрйл]$/;
+let unvoicedEnd_regex = /[пфсшщчхкктц]$/;
+let voicedEnd_regex = /[бвджжзггмнңрйл]$/;
 
 const Plural: Component = () => {
   const updateWord = (event: Event) => {
-    // event.preventDefault();
-    const wordInput = document.querySelector('#wordInput') as HTMLInputElement;
+    const wordInputElement = document.querySelector(
+      '#wordInput'
+    ) as HTMLInputElement;
+    const input = wordInputElement.value;
 
-    setWord(wordInput.value);
+    setWord(input);
 
-    if (wordInput.value.length > 0) {
-      if (/[пфсшщчхкктц]$/.test(wordInput.value)) {
-        setSuf('т?р');
-      } else if (/[бвджжзггмнңрйл]$/.test(wordInput.value)) {
-        setSuf('д?р');
-      } else {
-        setSuf('л?р');
-      }
-    } else {
+    if (input.length == 0) {
       setSuf('');
+      return;
     }
 
-    let lastVowel_regex = /[аэеыиоөуү](?=([^аэеыиоөуү]*$))/;
+    let pluralSufBase;
 
-    console.log(
-      'last vowel regex IDX: ',
-      wordInput.value.search(lastVowel_regex)
-    );
+    if (unvoicedEnd_regex.test(input)) {
+      pluralSufBase = 'т?р';
+    } else if (voicedEnd_regex.test(input)) {
+      pluralSufBase = 'д?р';
+    } else if (sonorantEnd_regex.test(input) || vowelEnd_regex.test(input)) {
+      pluralSufBase = 'л?р';
+    } else {
+      pluralSufBase = '';
+      console.log('something went wrong, word ends with unknown symbols');
+    }
 
-    let idx = wordInput.value.search(lastVowel_regex);
+    let lastVowel = input.match(lastVowel_regex)?.[0] ?? '';
+    if (!lastVowel) {
+      setSuf('');
+      return;
+    }
 
-    console.log('last vowel regex CHAR: ', wordInput.value[idx]);
+    let pluralSufVowel = sufPluralVowelHarmony[lastVowel] ?? '';
+
+    let pluralSuf = pluralSufBase.replace('?', pluralSufVowel);
+
+    setSuf(pluralSuf);
+
+    console.log('last vowel regex CHAR: ', lastVowel);
   };
-
-  // const gluhie_sogl = 'п, ф, с, ш, щ, ч, х, к, к, т, ц';
-  // const zvon_sogl = 'б, в, д, ж, ж, з, г, г';
-  // const son_sogl = 'м, н, ң, р, й, л';
-
-  // const suf_plural_cond = [/п$/];
-
-  // const suf_plural = ['л?р', 'д?р', 'т?р'];
-
-  const [suf, setSuf] = createSignal('');
 
   return (
     <div>

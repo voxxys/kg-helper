@@ -6,8 +6,6 @@ import styles from './App.module.css';
 import Nav from './components/Nav';
 import Plural from './pages/Plural';
 
-const [word, setWord] = createSignal('');
-
 const App: Component = () => {
   return (
     <div class="container">
@@ -19,5 +17,4 @@ const App: Component = () => {
   );
 };
 
-export { word, setWord };
 export default App;
