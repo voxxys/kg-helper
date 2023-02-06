@@ -3,7 +3,7 @@ import { word, setWord } from '../App';
 
 const Plural: Component = () => {
   const updateWord = (event: Event) => {
-    event.preventDefault();
+    // event.preventDefault();
     const wordInput = document.querySelector('#wordInput') as HTMLInputElement;
 
     setWord(wordInput.value);
@@ -20,7 +20,7 @@ const Plural: Component = () => {
       setSuf('');
     }
 
-    let lastVowel_regex = /[аэеыиоөуү].*(?![аэеыиоөуү])$/;
+    let lastVowel_regex = /[аэеыиоөуү](?=([^аэеыиоөуү]*$))/;
 
     console.log(
       'last vowel regex IDX: ',
